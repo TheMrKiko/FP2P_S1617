@@ -33,7 +33,15 @@ def pos_iguais(p1, p2):
 #Tipo Chave:
 # Construtores
 def gera_chave_linhas(l, mgc):
-    if isinstance(l, tuple) and not len([car for car in l if (not isinstance(car,str))]) and len(l)==25 and isinstance(mgc, str):
+    '''Recebe dois argumentos, um tuplo de 25 letras e uma cadeia de caracteres, constituida por letras desse tuplo. Devolve uma chave,'''
+    if isinstance(l, tuple) and len(l)==25 and isinstance(mgc, str):
+        raise ValueError("Tipo de Argumentos Invalido")
+    elif len([letra for letra in l if (not isinstance(letra, str))]):
+        '''Coisas'''
+        raise ValueError("Argumentos Invalidos")
+    elif len([car for car in l if (not isinstance(car,str))]):
+        raise ValueError("Argumentos Invalidos")
+    else:
         compact=()
         resto=()
         for car in range(len(mgc)):
@@ -42,5 +50,9 @@ def gera_chave_linhas(l, mgc):
         for letra in range(len(l)):
                 if l[letra] not in compact:
                     resto = resto + (l[letra],)
-        return compact + resto
+        return compact + resto        
 
+# Seletor
+def ref_chave(c, p):
+    '''Ola'''
+    
