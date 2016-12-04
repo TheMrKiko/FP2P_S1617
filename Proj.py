@@ -1,7 +1,7 @@
 #86416 Francisco Sousa
 
 #TIPOS ABSTRATOS DE DADOS
-#Tipo Posição:
+#Tipo Posicao:
 # Construtor
 def faz_pos(l, c):
     if not (isinstance(l, int) and isinstance(c, int) and l>=0 and c>=0):
@@ -33,4 +33,14 @@ def pos_iguais(p1, p2):
 #Tipo Chave:
 # Construtores
 def gera_chave_linhas(l, mgc):
-    if len([i for i in l if (not isinstance(i,str))]) and isinstance(mgc, str):
+    if isinstance(l, tuple) and not len([car for car in l if (not isinstance(car,str))]) and len(l)==25 and isinstance(mgc, str):
+        compact=()
+        resto=()
+        for car in range(len(mgc)):
+                if mgc[car] not in compact:
+                    compact = compact + (mgc[car],)
+        for letra in range(len(l)):
+                if l[letra] not in compact:
+                    resto = resto + (l[letra],)
+        return compact + resto
+
