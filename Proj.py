@@ -33,5 +33,4 @@ def pos_iguais(p1, p2):
 #Tipo Chave:
 # Construtores
 def gera_chave_linhas(l, mgc):
-    if len([i for i in l if (not isinstance(i,str))]):
-        return 
+    if len([i for i in l if (not isinstance(i,str))]) and isinstance(mgc, str):
