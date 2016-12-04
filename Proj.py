@@ -55,4 +55,3 @@ def gera_chave_linhas(l, mgc):
 # Seletor
 def ref_chave(c, p):
     '''Ola'''
-    
