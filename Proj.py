@@ -87,30 +87,6 @@ def gera_chave(l, mgc):
         return compacto + resto
 
 def gera_chave_linhas(l, mgc):
-
-    '''Recebe dois argumentos, um tuplo de 25 letras e uma cadeia de caracteres, constituida por letras desse tuplo. Devolve uma chave,'''
-    if isinstance(l, tuple) and len(l)==25 and isinstance(mgc, str):
-        raise ValueError("Tipo de Argumentos Invalido")
-    elif len([letra for letra in l if (not isinstance(letra, str))]):
-        '''Coisas'''
-        raise ValueError("Argumentos Invalidos")
-    elif len([car for car in l if (not isinstance(car,str))]):
-        raise ValueError("Argumentos Invalidos")
-    else:
-        compact=()
-        resto=()
-        for car in range(len(mgc)):
-                if mgc[car] not in compact:
-                    compact = compact + (mgc[car],)
-        for letra in range(len(l)):
-                if l[letra] not in compact:
-                    resto = resto + (l[letra],)
-        return compact + resto        
-
-# Seletor
-def ref_chave(c, p):
-    '''Ola'''
-
     '''Recebe dois argumentos, um tuplo de 25 letras e uma cadeia de caracteres,
     constituida por letras desse tuplo. Devolve uma chave, na forma de tuplo, em
     que a primeira parte sao as letras da cadeia de caracteres, sem espacos nem
@@ -139,4 +115,3 @@ def muda_chave(c, p, l):
     col = p[1]    
     nova_chave[lin][col] = l
     return nova_chave
-
