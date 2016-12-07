@@ -152,24 +152,63 @@ def digramas(mens):
                 return par + digramas(mens[2:])
     return digramas_rec(mens_sl)
 
-#figura
-
 def procura_pos(l, chave):
     for lin in range( len(chave) ):
         for col in range( len(chave[lin]) ):
             if ref_chave(chave, faz_pos(lin, col)) == l:
                 return faz_pos(lin, col)
-            
+#figura
 def figura(digrm, chave):
-    letra1 = digrm[0]
-    letra2 = digrm[1]
-    pos1 = procura_pos(letra1, chave)
-    pos2 = procura_pos(letra2, chave)
+    letra1, letra2 = digrm[0], digrm[1]
+    pos1, pos2 = procura_pos(letra1, chave), procura_pos(letra2, chave)
     if linha_pos(pos1) == linha_pos(pos2):
         fig = 'l'
     elif coluna_pos(pos1) == coluna_pos(pos2):
         fig = 'c'
     else:
         fig = 'r'
-    return fig, pos1, pos2
+    return (fig, pos1, pos2)
     
+def codifica_uni(indice, inc):
+    variacao = indice + inc
+    return variacao % 5
+    
+#codifica_l    
+def codifica_l(pos1, pos2, inc):
+    pos1_cod = faz_pos( linha_pos(pos1), codifica_uni(coluna_pos(pos1), inc) )
+    pos2_cod = faz_pos( linha_pos(pos2), codifica_uni(coluna_pos(pos2), inc) )
+    return (pos1_cod, pos2_cod)
+
+#codifica_c
+def codifica_c(pos1, pos2, inc):
+    pos1_cod = faz_pos( codifica_uni(linha_pos(pos1), inc), coluna_pos(pos1) )
+    pos2_cod = faz_pos( codifica_uni(linha_pos(pos2), inc), coluna_pos(pos2) )
+    return (pos1_cod, pos2_cod)
+
+#codifica_r
+def codifica_r(pos1, pos2):
+    pos1_cod = faz_pos( linha_pos(pos1), coluna_pos(pos2) )
+    pos2_cod = faz_pos( linha_pos(pos2), coluna_pos(pos1) )
+    return (pos1_cod, pos2_cod)
+
+#codifica_digrama
+def codifica_digrama(digrm, chave, inc):
+    fig = figura(digrm, chave)
+    pos1 = fig[1]
+    pos2 = fig[2]
+    if fig[0] == 'l':
+        pos_cod = codifica_l(pos1, pos2, inc)
+    elif fig[0] == 'c':
+        pos_cod = codifica_c(pos1, pos2, inc)
+    elif fig[0] == 'r':
+        pos_cod = codifica_r(pos1, pos2)
+    return ref_chave(chave, pos_cod[0]) + ref_chave(chave, pos_cod[1])
+
+#codifica
+def codifica(mens, chave, inc):
+    mens_cod = ""
+    digrms = digramas(mens)
+    for par in range(0, len(digrms), 2):
+        dig = digrms[par] + digrms[par+1]
+        mens_cod = mens_cod + codifica_digrama(dig, chave, inc)
+    return mens_cod
