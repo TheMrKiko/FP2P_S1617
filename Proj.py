@@ -86,24 +86,99 @@ def gera_chave(l, mgc):
                 resto = resto + [l[letra]]
         return compacto + resto
 
+def mete_em_linhas(chave):
+    chave_em_linhas = []
+    for lin in range(5):
+        linha = []
+        for col in range(5):
+            linha = linha + [chave[5*lin + col]]
+        chave_em_linhas = chave_em_linhas + [linha]
+    return chave_em_linhas
+
 def gera_chave_linhas(l, mgc):
     '''Recebe dois argumentos, um tuplo de 25 letras e uma cadeia de caracteres,
     constituida por letras desse tuplo. Devolve uma chave, na forma de lista, em
     que a primeira parte sao as letras da cadeia de caracteres, sem espacos nem
     repeticoes e o resto sao as letras do tuplo que nao aparecem na cadeia,
-    estando todas estas letras dispostas em listas de 5 elementos.'''    
+    estando todas estas letras dispostas em listas de 5 elementos.'''
     chave = gera_chave(l, mgc)
     if chave == False:
         raise ValueError("gera_chave_linhas: argumentos errados")
     else:
-        chave_linhas = []
-        for lin in range(5):
-            linha = []
-            for col in range(5):
-                linha = linha + [chave[5*lin + col]]
-            chave_linhas = chave_linhas + [linha]
-        return chave_linhas
+        return mete_em_linhas(chave)
+
+def calcula_pos(pos, coord, op):
+    pos = list(pos)
+    pos[coord] = pos[coord] + op
+    return tuple(pos)
+        
+def troca(coord):
+    return (coord + 1) % 2
+
+def pos_valida(nova_pos, coord, posicoes):
+    if nova_pos[coord] == 5 or nova_pos[coord] == -1 or nova_pos in posicoes:
+        return False
+    else:
+        return True
     
+def cria_espiral(pos, coord, op, chave):
+    posicoes = [pos]
+    for letra in range( len(chave) - 1 ):
+        nova_pos = calcula_pos(pos, coord, op)
+        
+        if not pos_valida(nova_pos, coord, posicoes):
+            coord = troca(coord)
+            nova_pos = calcula_pos(pos, coord, op)
+            
+            if not pos_valida(nova_pos, coord, posicoes):
+                op = -op
+                nova_pos = calcula_pos(pos, coord, op)
+                
+        pos = nova_pos
+        posicoes = posicoes + [pos]
+    return posicoes
+
+def cria_lista_vazia(el, leng):
+    lista = []
+    for indice in range(leng):
+        lista = lista + [el]
+    return lista
+
+def gera_chave_espiral(l, mgc, s, pos):
+    chave = gera_chave(l, mgc)
+    if chave == False or s not in ('r','c') or not e_pos(pos):
+        raise ValueError("gera_chave_espiral: argumentos errados")
+    else:
+        chave_espiral = []
+        if s == 'r':
+            if pos[0] == 0:
+                op = 1
+            else:
+                op = -1
+            if pos[0]==pos[1]:
+                coord = 1
+            else:
+                coord = 0
+        elif s == 'c':
+            if pos[1] == 0:
+                op = 1
+            else:
+                op = -1
+            if pos[0]==pos[1]:
+                coord = 0
+            else:
+                coord = 1
+                
+        espiral = cria_espiral(pos, coord, op, chave)
+        chave_espiral = mete_em_linhas(cria_lista_vazia("", 25))
+        
+        for indice in range( len(chave) ):
+            lin = linha_pos( espiral[indice] )
+            col = coluna_pos( espiral[indice] )
+            chave_espiral[lin][col] = chave[indice]
+            
+        return chave_espiral
+            
 # Seletor
 def ref_chave(c, p):
     '''Recebe uma chave e uma posicao e devolve a letra dessa chave na posicao.'''
@@ -210,5 +285,5 @@ def codifica(mens, chave, inc):
     digrms = digramas(mens)
     for par in range(0, len(digrms), 2):
         dig = digrms[par] + digrms[par+1]
-        mens_cod = mens_cod + codifica_digrama(dig, chave, inc)
+        mens_cod = mens_cod + codifica_digrama(dig, chave, inc) 
     return mens_cod
